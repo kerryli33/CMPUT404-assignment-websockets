@@ -22,7 +22,7 @@
     "/>
     <script src="json2.js"></script>
   </head> 
-  <body bgcolor="white" height="100%" width="100%"> 
+  <body bgcolor="f9d685" height="100%" width="100%"> 
     <div id="debug"></div>
     <canvas id="c" width="100%" height="100%" style="-webkit-tap-highlight-color: transparent;"></canvas> 
 
@@ -33,6 +33,7 @@ var host = window.location.host;
 var context = canvas.getContext("2d");
 var W = canvas.width  = window.innerWidth-6;
 var H = canvas.height = window.innerHeight-50;
+var colorlist = ['#66a8eb','#719ecc','#7dcc71','#4f695a','#614f69','#eac9f8','#e77375','#c7a9b7','#a9c7b7','#6ec7de','#6edebb','#de7e6e','#deb86e'];
 var wscounter = 0;
 var socket;
 
@@ -47,15 +48,17 @@ world = {};
 //XXX: TODO Make this prettier!
 function drawCircle(context,entity) {
     with(context) {
-        beginPath();                
+        beginPath();              
         lineWidth = 3;
         var x = entity["x"];
         var y = entity["y"];
         //moveTo(x,y);
-        fillStyle = entity["colour"];
-        strokeStyle = fillStyle;
+        strokeStyle = entity["colour"];
+        //fills translucent
+        fillStyle = strokeStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
-        stroke();                                
+        fill();     
+        stroke();                           
     }
 }
 
@@ -72,7 +75,7 @@ function prepEntity(entity) {
 function clearFrame() {
     with(context) {
 	moveTo(0,0);
-	fillStyle = "#000";
+    fillStyle = "#f9d685";
 	fillRect(0,0,W,H);
     }
 
@@ -233,15 +236,13 @@ mouse = (function() {
 // Add the application specific mouse listeners!
 //XXX: TODO Make these prettier!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'blue'});
+    addEntityWithoutName({'x':x,'y':y,'colour': colorlist[Math.floor(Math.random()*colorlist.length)] });
 });
-
 mouse.mouseuppers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'red'});
+    addEntityWithoutName({'x':x,'y':y,'colour':colorlist[Math.floor(Math.random()*colorlist.length)]});
 });
-
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y,'colour':'green',
+    addEntityWithoutName({'x':x,'y':y,'colour':colorlist[Math.floor(Math.random()*colorlist.length)],
                           'radius':10});
 });
 
@@ -279,7 +280,7 @@ function wsSetup() {
             debug("WebSocket Recv:" + msg.data);
             //XXX: TODO What are you going to do here?   
             console.log("RECIEVED: " + msg.data);        
-            content = JSON.parse(msg.data) 
+            content = JSON.parse(msg.data);
         
             let entity = content['entity'];
             let wData = content['data'];
