@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 import flask
-from flask import Flask, request,jsonify
+from flask import Flask, request,jsonify,redirect
 from flask_sockets import Sockets
 import gevent
 from gevent import queue
@@ -61,6 +61,9 @@ class World:
     def world(self):
         return self.space
     
+#Credit to Abram Hindle chat.py Websockets example
+#https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py
+
 class Client:
     def __init__(self):
         self.queue = queue.Queue()
@@ -116,6 +119,8 @@ def read_ws(ws,client):
         print("Done or Error:")
         print(traceback.format_exc())
         
+#Credit to Abram Hindle chat.py Websockets example
+#https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py
 
 @sockets.route('/subscribe')
 def subscribe_socket(ws):

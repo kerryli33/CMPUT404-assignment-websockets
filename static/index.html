@@ -253,6 +253,9 @@ function update() {
 
 
 function wsSetup() {
+    //Credit to Abram Hindle chat.py Websockets example
+    //https://github.com/abramhindle/WebSocketsExamples/blob/master/chat.py
+
     var url = "ws://"+host+"/subscribe";   
     socket = new WebSocket(url);
     socket.onopen = function() {
